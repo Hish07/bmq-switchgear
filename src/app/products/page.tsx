@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { products, productCategories } from "@/lib/products";
 import { ArrowRight, Zap } from "lucide-react";
 
@@ -46,16 +47,19 @@ export default function ProductsPage() {
                     key={product.slug}
                     className="card overflow-hidden group hover:-translate-y-1 transition-all duration-300"
                   >
-                    {/* Image placeholder */}
-                    <div className="h-44 bg-gradient-to-br from-navy-100 to-navy-200 flex items-center justify-center relative overflow-hidden">
-                      <div className="text-center px-4">
-                        <div className="text-5xl font-black text-navy-300 opacity-50">
-                          {product.name}
-                        </div>
-                        <div className="text-xs text-navy-500 mt-1">
-                          {product.fullForm}
-                        </div>
-                      </div>
+                    {/* Product Image */}
+                    <div className="h-48 relative overflow-hidden bg-navy-900">
+                      <Image
+                        src={product.image}
+                        alt={`${product.name} - ${product.fullForm}`}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-navy-950/75 via-navy-950/15 to-transparent" />
+                      <span className="absolute bottom-3 left-3 text-xs font-bold font-mono bg-navy-900/85 text-amber-400 px-2.5 py-1 rounded border border-navy-700/60 backdrop-blur-sm shadow-sm">
+                        {product.name}
+                      </span>
                     </div>
                     <div className="p-5">
                       <h3 className="text-navy-800 font-bold text-lg mb-1">

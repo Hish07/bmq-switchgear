@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { getProductBySlug, getRelatedProducts, products } from "@/lib/products";
 import {
   Zap,
@@ -71,6 +72,23 @@ export default function ProductDetailPage({ params }: Props) {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-10">
+              {/* Product Featured Image */}
+              <div className="relative h-72 sm:h-96 w-full rounded-2xl overflow-hidden shadow-md border border-gray-100 bg-navy-950">
+                <Image
+                  src={product.image}
+                  alt={`${product.name} - ${product.fullForm} Manufactured by BMQ Electrical Switchgear LLC`}
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 66vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-950/70 via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-4 bg-navy-900/85 backdrop-blur-md px-4 py-2 rounded-lg border border-navy-700/60 text-xs font-semibold text-white flex items-center gap-2 shadow-lg">
+                  <span className="text-amber-400 font-mono font-bold">{product.name}</span>
+                  <span className="text-gray-300">| Custom Manufactured Assembly · UAE</span>
+                </div>
+              </div>
+
               {/* Introduction */}
               <div>
                 <h2 className="text-xl font-bold text-navy-800 mb-3">Introduction</h2>
@@ -221,21 +239,36 @@ export default function ProductDetailPage({ params }: Props) {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {related.map((p) => (
-                <div key={p.slug} className="card p-5 hover:-translate-y-1 transition-all duration-300">
-                  <span className="text-xs font-semibold text-amber-500 mb-1 block">
-                    {p.category}
-                  </span>
-                  <h3 className="font-bold text-navy-800 mb-1">{p.name}</h3>
-                  <p className="text-xs text-gray-500 mb-1">{p.fullForm}</p>
-                  <p className="text-sm text-gray-500 leading-relaxed mb-4">
-                    {p.tagline}
-                  </p>
-                  <Link
-                    href={`/products/${p.slug}`}
-                    className="text-sm font-semibold text-amber-500 hover:text-amber-600 flex items-center gap-1 transition-colors"
-                  >
-                    View Details <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
+                <div key={p.slug} className="card overflow-hidden group hover:-translate-y-1 transition-all duration-300">
+                  <div className="h-40 relative overflow-hidden bg-navy-950">
+                    <Image
+                      src={p.image}
+                      alt={p.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-navy-950/75 via-transparent to-transparent" />
+                    <span className="absolute bottom-2 left-2 text-xs font-mono font-bold bg-navy-900/80 text-amber-400 px-2 py-0.5 rounded border border-navy-700/50">
+                      {p.name}
+                    </span>
+                  </div>
+                  <div className="p-5">
+                    <span className="text-xs font-semibold text-amber-500 mb-1 block">
+                      {p.category}
+                    </span>
+                    <h3 className="font-bold text-navy-800 mb-1">{p.name}</h3>
+                    <p className="text-xs text-gray-500 mb-2">{p.fullForm}</p>
+                    <p className="text-sm text-gray-500 leading-relaxed mb-4 line-clamp-2">
+                      {p.tagline}
+                    </p>
+                    <Link
+                      href={`/products/${p.slug}`}
+                      className="text-sm font-semibold text-amber-500 hover:text-amber-600 flex items-center gap-1 transition-colors"
+                    >
+                      View Details <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
                 </div>
               ))}
             </div>
