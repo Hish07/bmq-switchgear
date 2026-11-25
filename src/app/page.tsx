@@ -11,7 +11,7 @@ import {
 } from "@/components/home/HomeSections";
 
 export const metadata: Metadata = {
-  title: "BMQ Electrical Switchgear LLC | LV Switchgear Manufacturer UAE",
+  title: "BMQ Electrical Switchgear LLC",
   description:
     "BMQ Electrical Switchgear LLC — UAE-based manufacturer and supplier of customised low-voltage electrical distribution boards, MDB, SMDB, MCC, ATS panels and switchgear solutions.",
 };

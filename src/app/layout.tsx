@@ -6,8 +6,13 @@ import Footer from "@/components/layout/Footer";
 export const metadata: Metadata = {
   metadataBase: new URL("https://bmqswitchgear.com"),
   title: {
-    default: "BMQ Electrical Switchgear LLC | LV Switchgear Manufacturer UAE",
+    default: "BMQ Electrical Switchgear LLC",
     template: "%s | BMQ Electrical Switchgear LLC",
+  },
+  icons: {
+    icon: "/images/logo/bmq-logo.jpg",
+    shortcut: "/images/logo/bmq-logo.jpg",
+    apple: "/images/logo/bmq-logo.jpg",
   },
   description:
     "BMQ Electrical Switchgear LLC is a UAE-based manufacturer and supplier of low-voltage electrical distribution boards, switchgear panels and motor control panels. MDB, SMDB, MCC, ATS and more.",
