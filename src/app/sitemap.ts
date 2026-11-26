@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { products } from '@/lib/products';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://bmqswitchgear.com';
+  const baseUrl = 'https://switchgearuae.com';
 
   const staticPages = [
     '',

@@ -4,7 +4,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://bmqswitchgear.com"),
+  metadataBase: new URL("https://switchgearuae.com"),
   title: {
     default: "BMQ Electrical Switchgear LLC",
     template: "%s | BMQ Electrical Switchgear LLC",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_AE",
-    url: "https://bmqswitchgear.com",
+    url: "https://switchgearuae.com",
     siteName: "BMQ Electrical Switchgear LLC",
     title: "BMQ Electrical Switchgear LLC | LV Switchgear Manufacturer UAE",
     description:
@@ -75,13 +75,18 @@ export default function RootLayout({
     name: "BMQ Electrical Switchgear LLC",
     description:
       "UAE-based manufacturer and supplier of low-voltage electrical distribution boards, switchgear panels and motor control panels.",
-    url: "https://bmqswitchgear.com",
-    logo: "https://bmqswitchgear.com/images/logo/bmq-logo.jpg",
-    image: "https://bmqswitchgear.com/images/logo/bmq-logo.jpg",
+    url: "https://switchgearuae.com",
+    logo: "https://switchgearuae.com/images/logo/bmq-logo.jpg",
+    image: "https://switchgearuae.com/images/logo/bmq-logo.jpg",
+    telephone: "+971-2-554-8641",
+    faxNumber: "+971-2-554-8642",
     address: {
       "@type": "PostalAddress",
+      streetAddress: "ICAD 1, Musaffah",
+      addressLocality: "Abu Dhabi",
+      addressRegion: "Abu Dhabi",
+      postalCode: "33160",
       addressCountry: "AE",
-      addressRegion: "United Arab Emirates",
     },
     areaServed: "United Arab Emirates",
     priceRange: "$$",

@@ -110,23 +110,23 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" />
                 <span className="text-sm text-gray-400">
-                  {/* PLACEHOLDER: Replace with actual address */}
-                  [Company Address],<br />United Arab Emirates
+                  ICAD 1, Musaffah,<br />P.O. Box 33160,<br />Abu Dhabi, U.A.E
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-amber-400 flex-shrink-0" />
                 <span className="text-sm text-gray-400">
-                  {/* PLACEHOLDER: Replace with actual phone */}
-                  +971 [XX] [XXX XXXX]
+                  Tel: (02) 5548641<br />Fax: (02) 5548642
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-amber-400 flex-shrink-0" />
-                <span className="text-sm text-gray-400">
-                  {/* PLACEHOLDER: Replace with actual email */}
-                  info@bmqswitchgear.com
-                </span>
+                <a
+                  href="mailto:info@switchgearuae.com"
+                  className="text-sm text-gray-400 hover:text-amber-400 transition-colors"
+                >
+                  info@switchgearuae.com
+                </a>
               </li>
             </ul>
           </div>

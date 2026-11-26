@@ -1,7 +1,8 @@
 # PROJECT HANDOFF DOCUMENTATION
 **Project**: BMQ Electrical Switchgear LLC — Official Corporate Website  
-**Repository**: `bmq-switchgear`  
-**Date**: November 24, 2026  
+**Repository**: `bmq-switchgear` (`https://github.com/Hish07/bmq-switchgear.git`)  
+**Last Updated**: November 26, 2026 (Updated by Gemini)  
+**Current Branch**: `main` (ahead of `origin/main` by 2 commits; working tree clean before this `HANDOFF.md` edit)  
 
 ---
 
@@ -27,20 +28,13 @@
     - `amber-400` (`#fac96b`), `amber-600` (`#d4891a`), `amber-700` (`#b36e12`)
     - `amber-50` (`#fffbeb` / soft tint for cards)
 - **Typography**:
-  - Primary font: Inter via CSS fallback (`font-family: 'Inter', system-ui, -apple-system, sans-serif;`) loaded via `@import` in `globals.css` with system fallbacks to ensure local offline builds work without external font fetch errors.
+  - Primary font: Inter via CSS fallback (`font-family: 'Inter', system-ui, -apple-system, sans-serif;`) loaded via `@import` in `globals.css` with system fallbacks so offline/sandboxed builds work without `next/font/google` fetch errors.
   - Monospace font: JetBrains Mono (`font-mono`) for technical specifications and machine model numbers.
 - **Tailwind Component Classes** (defined in `@layer components` in `src/app/globals.css`):
-  - `.btn-primary`: Amber button with dark navy text, hover lift, shadow.
-  - `.btn-secondary`: White outlined button on dark backgrounds.
-  - `.btn-outline`: Navy-700 border button on light backgrounds.
-  - `.section-label`: Uppercase tracking-widest text in amber-500.
-  - `.section-title`: 3xl/4xl bold heading in navy-800.
-  - `.section-title-white`: 3xl/4xl bold heading in pure white.
-  - `.card`: White background, subtle border, rounded-xl, hover shadow.
-  - `.container-custom`: `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`.
-  - `.clip-diagonal-down` / `.clip-diagonal-up`: Polygon clip paths for section transitions.
+  - `.btn-primary`, `.btn-secondary`, `.btn-outline`, `.section-label`, `.section-title`, `.section-title-white`, `.card`, `.container-custom`
+  - `.clip-diagonal-down` / `.clip-diagonal-up`
 
-### 1.3 Folder Structure & File Organization
+### 1.3 Current Folder Structure
 ```
 bmq-switchgear/
 ├── public/
@@ -53,16 +47,23 @@ bmq-switchgear/
 │       │   ├── shearing-machine.jpg         # Omega QC12Y-4x2500 CNC Guillotine Shear
 │       │   ├── bending-machine.jpg          # Weida Pan & Box Folder
 │       │   └── busbar-punching-machine.jpg  # Hydraulic Punch Press
-│       └── products/                        # Product placeholders
+│       └── products/                        # 16 real industrial photographs (one per product)
+│           ├── mdb.jpg, smdb.jpg, db.jpg, meter-cabinet.jpg, cut-out.jpg, socket-panel.jpg
+│           ├── capacitor-bank.jpg, mcc.jpg, dol-starter.jpg, star-delta-starter.jpg
+│           ├── vfd-starter.jpg, pool-control-panel.jpg, ats.jpg, mts.jpg
+│           └── synchronizing-panel.jpg, isolator.jpg
 ├── src/
 │   ├── app/
-│   │   ├── layout.tsx                       # Root layout with Header and Footer
+│   │   ├── icon.jpg                         # BMQ logo used as browser tab favicon (replaced favicon.ico)
+│   │   ├── layout.tsx                       # Root layout, Header/Footer, metadata, icons, JSON-LD LocalBusiness
 │   │   ├── globals.css                      # Base styles, Tailwind utilities, button classes
-│   │   ├── page.tsx                         # Homepage assembling sections from HomeSections.tsx
+│   │   ├── page.tsx                         # Homepage (title: "BMQ Electrical Switchgear LLC")
+│   │   ├── robots.ts                        # Next.js MetadataRoute robots.txt generator
+│   │   ├── sitemap.ts                       # Dynamic sitemap.xml covering all 8 pages + 16 product slugs
 │   │   ├── about/page.tsx                   # About Us page
 │   │   ├── products/
-│   │   │   ├── page.tsx                     # Product catalogue (categorized)
-│   │   │   └── [slug]/page.tsx              # Dynamic product detail page (16 products, static params)
+│   │   │   ├── page.tsx                     # Product catalogue with Next.js <Image> cards
+│   │   │   └── [slug]/page.tsx              # Dynamic SSG product detail page (16 products) with hero & related images
 │   │   ├── industries/page.tsx              # Industries & applications (9 sectors)
 │   │   ├── manufacturing/page.tsx           # 10-step process + real machinery showcase
 │   │   ├── quality/page.tsx                 # Quality control steps + IEC standard references
@@ -73,12 +74,12 @@ bmq-switchgear/
 │   │   │   ├── Header.tsx                   # Sticky responsive navbar, dropdowns, quote button
 │   │   │   └── Footer.tsx                   # 4-column footer with links & placeholders
 │   │   ├── home/
-│   │   │   └── HomeSections.tsx             # Modular sections: Hero, TrustBar, Intro, Categories,
-│   │   │                                    # Manufacturing, Industries, WhyChoose, RFQBanner
+│   │   │   └── HomeSections.tsx             # Hero, TrustBar, Intro, Categories, Manufacturing, Industries, WhyChoose, RFQBanner
 │   │   └── forms/
-│   │       └── RFQForm.tsx                  # React Hook Form + Zod validation RFQ inquiry form
+│   │       └── RFQForm.tsx                  # React Hook Form + Zod validation RFQ inquiry form (demo mode)
 │   └── lib/
 │       └── products.ts                      # Complete data store for all 16 switchgear products
+├── HANDOFF.md
 ├── next.config.mjs
 ├── tailwind.config.ts
 ├── tsconfig.json
@@ -86,140 +87,61 @@ bmq-switchgear/
 ```
 
 ### 1.4 Code & Content Conventions
-- **No Fictional Credentials**: As instructed, no fake project lists, fake client testimonials, or unverified regulatory approvals (DEWA/SEWA/ADDC) are claimed. A clear note in `quality/page.tsx` specifies IEC standards are design guidelines.
-- **Placeholders**: Missing operational details (phone, email, physical address, map coordinates, WhatsApp link) are consistently marked with comments like `{/* PLACEHOLDER: Replace with actual ... */}` and user-friendly textual placeholders.
-- **Product Data Model**: Standardized in `src/lib/products.ts` with typed interfaces:
-  `slug`, `name`, `fullForm`, `category`, `categorySlug`, `tagline`, `intro`, `purpose`, `applications[]`, `components[]`, `configurations[]`, `image`, `relatedSlugs[]`.
+- **No Fictional Credentials**: No fake projects, fake client names, or unverified regulatory approvals (DEWA/SEWA/ADDC) are claimed.
+- **Placeholders**: Missing operational details (phone, email, physical address, Google Maps embed, WhatsApp number, verified projects) remain clearly marked with `{/* PLACEHOLDER ... */}` comments and bracketed text.
 
 ---
 
-## 2. What Is Already Completed and Working
+## 2. What Was Completed by Gemini (Commits `6054a00` → `11d727d`)
 
-1. **Scaffolding & Configuration**:
-   - Next.js 14 App Router project successfully created and configured with TypeScript and Tailwind CSS.
-   - Dependencies installed (`lucide-react`, `react-hook-form`, `@hookform/resolvers`, `zod`).
-   - Tailwind color tokens and helper classes fully configured matching the BMQ brand.
-   - Next.js image optimization configuration in `next.config.mjs`.
+All items from the previous handoff have been completed and verified:
 
-2. **Asset Migration**:
-   - All 5 user-provided images copied to `/public/images/` under structured directories (`logo`, `shop`, `machinery`).
-   - Machinery models accurately referenced in the UI:
-     - Omega QC12Y-4×2500 CNC Guillotine Shear
-     - Weida Pan & Box Folder
-     - Hydraulic Panel & Busbar Punching Machine
-
-3. **Product Data & Catalog (`src/lib/products.ts`)**:
-   - Full technical data objects created for all 16 required products across 5 categories:
-     1. MDB – Main Distribution Board
-     2. SMDB – Sub-Main Distribution Board
-     3. DB / FDB – Distribution Board / Final Distribution Board
-     4. Meter Cabinet
-     5. Cut-out
-     6. Socket Panel
-     7. Capacitor Bank / APFC Panel
-     8. MCC – Motor Control Centre
-     9. DOL Starter
-     10. Star-Delta Starter
-     11. VFD Starter
-     12. Swimming Pool Control Panel
-     13. ATS – Automatic Transfer Switch
-     14. MTS – Manual Transfer Switch
-     15. Synchronizing Panel
-     16. Isolator / Disconnecting Switch
-
-4. **All 8 Pages Implemented**:
-   - `src/app/page.tsx` (Homepage with Hero, Trust Bar, Company Intro, Categories, Manufacturing Highlight, Industries, Why Choose BMQ, RFQ Banner)
-   - `src/app/about/page.tsx` (Company Overview, Vision, Mission, Core Values, Customization Approach)
-   - `src/app/products/page.tsx` (Categorized catalog with direct enquiry & detail links)
-   - `src/app/products/[slug]/page.tsx` (Dynamic SSG pages with `generateStaticParams` for all 16 products, specifications disclaimer, component chips, related products)
-   - `src/app/industries/page.tsx` (9 UAE application sectors mapped to specific switchgear products)
-   - `src/app/manufacturing/page.tsx` (10-stage manufacturing sequence + machinery breakdown)
-   - `src/app/quality/page.tsx` (6 quality control gates + IEC 61439-1/2, IEC 60947, IEC 60529 notes)
-   - `src/app/projects/page.tsx` (Transparent portfolio layout with placeholder notice)
-   - `src/app/contact/page.tsx` (Company contacts, Google Maps placeholder, WhatsApp note, and RFQ form)
-
-5. **Navigation & Layout**:
-   - `src/components/layout/Header.tsx` (Sticky header, mobile drawer menu, dropdown menus, CTA)
-   - `src/components/layout/Footer.tsx` (Brand overview, product links, company links, contact details)
+1. **Fixed Lint & Build Blockers (`6054a00`)**:
+   - Removed unused icon imports (`Mail`, `Phone`, `MapPin`, `Zap`) from `src/components/forms/RFQForm.tsx`.
+   - Verified `npm run lint` passes with zero warnings or errors.
+2. **Added SEO Infrastructure (`6054a00`)**:
+   - Created `src/app/sitemap.ts` (all static pages + all 16 `/products/[slug]` routes).
+   - Created `src/app/robots.ts` (allows `/` and disallows `/api/`, links to `sitemap.xml`).
+   - Added `LocalBusiness` JSON-LD structured data in `src/app/layout.tsx`.
+3. **Initialized & Linked Git Remote (`6054a00`)**:
+   - Renamed default branch to `main` and added remote `origin` (`https://github.com/Hish07/bmq-switchgear.git`).
+   - Initial project commit pushed by user to `origin/main` up to `6054a00`.
+4. **Added All 16 Product Catalogue & Detail Images (`3695703`)**:
+   - Downloaded 16 distinct industrial electrical switchgear/panel photographs into `public/images/products/`.
+   - Updated `src/app/products/page.tsx` to render `<Image src={product.image} ... />` inside product cards instead of text placeholders.
+   - Updated `src/app/products/[slug]/page.tsx` to display a featured product image banner and image thumbnails on the Related Products cards.
+5. **Updated Browser Tab Title & Favicon (`11d727d`)**:
+   - Updated `title.default` in `src/app/layout.tsx` and `metadata.title` in `src/app/page.tsx` to `"BMQ Electrical Switchgear LLC"`.
+   - Deleted default `src/app/favicon.ico` and added `src/app/icon.jpg` (copied from `public/images/logo/bmq-logo.jpg`), plus `icons` metadata in `src/app/layout.tsx`.
+6. **Build Verification**:
+   - Ran clean `npm run build` after `11d727d`: **30/30 static & SSG pages compiled cleanly (exit code 0)**, including `/icon.jpg`, `/robots.txt`, `/sitemap.xml`, and all 16 `/products/[slug]` pages.
 
 ---
 
-## 3. The Exact Unfinished Part Where Work Stopped
+## 3. Current Project State & What Remains
 
-Work stopped at **Stage 1 & 2 Build Verification (`npm run build`)**.
+The website is **feature-complete as a static/client-validated build** and compiles cleanly. The only remaining work depends on user-provided business credentials and backend configuration:
 
-The compiler passed webpack compilation (`✓ Compiled successfully`), but failed the linting step during `next build`:
-
-### Error Location:
-**File**: `src/components/forms/RFQForm.tsx` (Line 6)
-
-```typescript
-// Current line 6:
-import { Mail, Phone, MapPin, Zap, Send, CheckCircle2, AlertCircle } from "lucide-react";
-```
-
-### Build Error Output:
-```
-Failed to compile.
-./src/components/forms/RFQForm.tsx
-6:10  Error: 'Mail' is defined but never used.       @typescript-eslint/no-unused-vars
-6:16  Error: 'Phone' is defined but never used.      @typescript-eslint/no-unused-vars
-6:23  Error: 'MapPin' is defined but never used.     @typescript-eslint/no-unused-vars
-6:31  Error: 'Zap' is defined but never used.        @typescript-eslint/no-unused-vars
-```
-
-Because `Mail`, `Phone`, `MapPin`, and `Zap` were imported but not referenced inside `RFQForm.tsx` (they were used in `contact/page.tsx` instead), ESLint fails the production build.
+1. **Git Push Pending**:
+   - Local `main` is ahead of `origin/main` by 2 commits (`3695703`, `11d727d`) plus this `HANDOFF.md` update once committed.
+2. **RFQ Backend & File Upload (`src/components/forms/RFQForm.tsx`)**:
+   - Currently runs in **demo/client-validation mode** (simulates a 1.2s submit and shows a notice that backend email delivery is not yet configured).
+   - File attachment (`SLD / BOQ / Specs`) is currently a placeholder notice.
+   - Needs a `/api/rfq` route handler (e.g., Resend or Nodemailer) + `.env.local` credentials + file upload handling when the user provides their email/provider details.
+3. **Missing Real Company Information (Placeholders in Code)**:
+   - Physical UAE address, phone number, email address (`Footer.tsx`, `contact/page.tsx`, `layout.tsx` JSON-LD).
+   - Google Maps embed (`src/app/contact/page.tsx`).
+   - Official WhatsApp Business number/button (`src/app/contact/page.tsx`).
+   - Verified completed projects (`src/app/projects/page.tsx`).
+   - Real BMQ-manufactured panel photos to replace stock product photos in `public/images/products/` if/when provided.
 
 ---
 
-## 4. Step-by-Step Instructions to Finish the Remaining Work
+## 4. Next Steps for Claude (When User Requests)
 
-When approved, proceed through these exact sequential steps:
-
-### Step 1: Clean Unused Imports in `RFQForm.tsx`
-In `src/components/forms/RFQForm.tsx`, update line 6:
-```typescript
-// Replace:
-import { Mail, Phone, MapPin, Zap, Send, CheckCircle2, AlertCircle } from "lucide-react";
-
-// With:
-import { Send, CheckCircle2, AlertCircle } from "lucide-react";
-```
-
-### Step 2: Verify Production Build
-Run:
-```bash
-npm run build
-```
-Verify that all 16 static routes for `/products/[slug]` and all static pages compile cleanly with 0 errors.
-
-### Step 3: Run and Validate Local Server
-Run:
-```bash
-npm run dev
-```
-Probe `http://localhost:3000` to verify:
-1. Homepage (`/`) loads with hero image, machinery photos, and navigation.
-2. Product Catalogue (`/products`) lists all 16 products properly grouped into 5 categories.
-3. Product detail dynamic routes (e.g. `/products/mdb-main-distribution-board`) render with full specifications, components, and related links.
-4. Manufacturing page (`/manufacturing`) shows the 10-step process and machinery photos.
-5. Contact & RFQ form (`/contact`) validates inputs (name, company, email format, phone, location, message) and renders the confirmation state.
-6. Responsive navigation works on mobile and desktop viewports.
-
-### Step 4: SEO & Production Polish (Stage 5 Deliverables)
-1. Add `robots.ts` or `public/robots.txt` allowing all legitimate crawlers.
-2. Add dynamic `sitemap.ts` in `src/app/sitemap.ts` mapping:
-   - Base pages (`/`, `/about`, `/products`, `/industries`, `/manufacturing`, `/quality`, `/projects`, `/contact`)
-   - All 16 product URLs (`/products/${product.slug}`)
-3. Verify JSON-LD Schema markup for `Organization` and `LocalBusiness` in `layout.tsx`.
-
-### Step 5: Final Review & Git Commit
-Stage the completed files and create an initial commit:
-```bash
-git add .
-git commit -m "feat: complete BMQ Electrical Switchgear corporate website with 16 product routes and RFQ flow"
-```
-
----
-
-*Handoff document prepared. Awaiting user approval to proceed with Step 1.*
+1. Do **not** alter the existing Tailwind `navy-*` / `amber-*` theme, `src/lib/products.ts` structure, or factual-accuracy rules unless asked.
+2. If the user asks to wire up the **Request a Quotation** backend:
+   - Create `src/app/api/rfq/route.ts` with Zod server-side validation and `FormData` file attachment support (PDF, DWG, XLSX, DOC, PNG, JPG).
+   - Connect it to the user's chosen email service (e.g., Resend or Nodemailer) via environment variables in `.env.local`, and update `src/components/forms/RFQForm.tsx` to `POST` to `/api/rfq`.
+3. If the user provides real company contact details, WhatsApp number, map embed, or project entries, replace the `{/* PLACEHOLDER ... */}` blocks in `Footer.tsx`, `contact/page.tsx`, `projects/page.tsx`, and `layout.tsx`.
+4. Commit and remind the user to run `git push` from their terminal if needed.

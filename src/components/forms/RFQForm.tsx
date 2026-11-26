@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Send, CheckCircle2, AlertCircle } from "lucide-react";
+import { Send, CheckCircle2 } from "lucide-react";
 
 const rfqSchema = z.object({
   customerName: z.string().min(2, "Name is required"),
@@ -53,12 +53,38 @@ export default function RFQForm() {
 
   const onSubmit = async (data: RFQData) => {
     setSubmitting(true);
-    // Simulate a short delay; replace with actual API call when backend is configured
-    await new Promise((r) => setTimeout(r, 1200));
-    console.log("RFQ submitted:", data);
-    setSubmitted(true);
-    setSubmitting(false);
-    reset();
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_KEY,
+          subject: `RFQ: ${data.productRequired} — ${data.companyName}`,
+          from_name: data.customerName,
+          customerName: data.customerName,
+          companyName: data.companyName,
+          email: data.email,
+          phone: data.phone,
+          productRequired: data.productRequired,
+          quantity: data.quantity || "Not specified",
+          projectLocation: data.projectLocation,
+          technicalRequirements: data.technicalRequirements || "Not specified",
+          message: data.message,
+        }),
+      });
+      const result = await response.json();
+      if (result.success) {
+        setSubmitted(true);
+        reset();
+      } else {
+        throw new Error(result.message || "Submission failed");
+      }
+    } catch (err) {
+      console.error("RFQ submission error:", err);
+      alert("There was an error submitting your enquiry. Please try again or contact us directly by phone.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -70,23 +96,11 @@ export default function RFQForm() {
         </h3>
         <p className="text-green-700 mb-4 text-sm leading-relaxed">
           Thank you for your enquiry. BMQ will review your requirements and
-          respond with a technical and commercial proposal.
+          respond with a technical and commercial proposal within 1–2 business days.
         </p>
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-left text-sm text-amber-800">
-          <p className="font-semibold mb-1 flex items-center gap-2">
-            <AlertCircle className="w-4 h-4" />
-            Backend Configuration Required
-          </p>
-          <p>
-            This form is currently in demo mode. To activate email delivery,
-            configure your email provider credentials in <code>.env.local</code>{" "}
-            and implement the <code>/api/rfq</code> route. See{" "}
-            <code>README.md</code> for setup instructions.
-          </p>
-        </div>
         <button
           onClick={() => setSubmitted(false)}
-          className="mt-4 text-sm text-green-700 underline"
+          className="mt-2 text-sm text-green-700 underline"
         >
           Submit another enquiry
         </button>
@@ -234,7 +248,7 @@ export default function RFQForm() {
         <p>
           File attachment will be available after backend configuration. In the
           meantime, please email your SLD or specifications directly to{" "}
-          <strong>info@bmqswitchgear.com</strong> {/* PLACEHOLDER */}
+          <strong>info@switchgearuae.com</strong>
           with your enquiry reference.
         </p>
       </div>
